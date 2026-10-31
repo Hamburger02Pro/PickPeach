@@ -11,20 +11,20 @@
         android:roundIcon="@drawable/cat"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity
-            android:name=".MainActivity3"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--        <activity-->
+<!--            android:name=".MainActivity3"-->
+<!--            android:exported="true"-->
+<!--            android:windowSoftInputMode="adjustResize">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity4"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize" />
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+<!--        <activity-->
+<!--            android:name=".MainActivity4"-->
+<!--            android:exported="true"-->
+<!--            android:windowSoftInputMode="adjustResize" />-->
         <activity
             android:name=".Peach.MainActivity"
             android:exported="true"
@@ -35,16 +35,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 桃园页：不挂 LAUNCHER，只能从首页进入，避免桌面出现第二个图标 -->
         <activity
             android:name=".Peach.PeachActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
