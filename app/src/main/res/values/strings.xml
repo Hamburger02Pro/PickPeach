@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">摘桃记</string>
     <string name="username_label">用户名</string>
     <string name="username_hint">请输入用户名</string>
     <string name="password_label">密码</string>
