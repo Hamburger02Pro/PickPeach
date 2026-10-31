@@ -197,6 +197,3 @@ adb exec-out screencap -p > screen.png
 - **v1.1** — 应用更名为「摘桃记」；补充踩坑记录
 - **v1.0** — 完成首页 / 桃园页、点击摘桃计数、结果回传、累计数持久化
 
-## License
-
-MIT License
