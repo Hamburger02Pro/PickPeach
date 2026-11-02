@@ -1,15 +1,16 @@
-*.iml
+# Gradle / 构建产物
 .gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
+
+# 本机配置（含 SDK 路径）
 local.properties
+
+# IntelliJ / Android Studio 本地配置（由 IDE 自动生成，不需要共享）
+*.iml
+.idea/
+
+# macOS
+.DS_Store

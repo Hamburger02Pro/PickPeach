@@ -37,6 +37,7 @@
 | minSdk | 24（Android 7.0） |
 | Android Gradle Plugin | 9.3.2 |
 | Gradle | 9.5.0 |
+| JDK | **25**（`gradle/gradle-daemon-jvm.properties` 要求；用 Android Studio 自带的 `jbr` 即可） |
 | 主要依赖 | appcompat、material、constraintlayout、activity-ktx、recyclerview |
 
 ## 目录结构
@@ -44,24 +45,20 @@
 ```
 app/src/main/
 ├── AndroidManifest.xml                  # 只注册 1 个启动入口：Peach.MainActivity
-├── java/com/example/myapplication/
-│   ├── Peach/
-│   │   ├── MainActivity.java            # 首页：显示累计数、跳转桃园、接收结果
-│   │   └── PeachActivity.java           # 桃园：点桃子计数、退出回传
-│   ├── MainActivity2.java               # 其它练习页（未在清单注册）
-│   ├── MainActivity3.java
-│   ├── MainActivity4.java
-│   ├── ListViewActivity.java
-│   ├── RecycleActivity.java
-│   ├── PhotoViewActivity.java
-│   └── CirculeView.java                 # 自定义 View（圆形头像），不是页面
+├── java/com/example/myapplication/Peach/
+│   ├── MainActivity.java                # 首页：显示累计数、跳转桃园、接收结果
+│   └── PeachActivity.java               # 桃园：点桃子计数、退出回传
 └── res/
     ├── layout/
     │   ├── activity_main_peach.xml      # 首页布局
     │   └── activity_peach.xml           # 桃园布局（树 + 6 个桃子 + 退出）
-    ├── drawable/                        # bg / monkey / peach_pic / tree / tree_bg / btn_peach ...
+    ├── drawable/
+    │   ├── bg.png / monkey.png          # 首页场景背景、猴子
+    │   ├── peach_pic.png / btn_peach.png# 桃子图标、绿色按钮
+    │   └── tree.png / tree_bg.png       # 桃园：树、草地场景
+    ├── drawable-hdpi/cat.png            # 应用图标
     └── values/
-        ├── strings.xml                  # 文案
+        ├── strings.xml                  # 文案：app_name / peach_title / peach_exit / peach_desc
         └── themes.xml                   # Material3 主题
 ```
 
@@ -140,6 +137,41 @@ cd PickPeach
 3. 等待 Gradle Sync 完成
 4. 选择运行配置 **app** → 点绿色三角运行
 
+### 环境要求：JDK 25
+
+`gradle/gradle-daemon-jvm.properties` 里写着 `toolchainVersion=25`，因此**命令行构建需要 JDK 25**。
+不用另外下载，Android Studio 自带的 `jbr` 就是 25，把它设为 `JAVA_HOME` 即可。
+
+**Windows（PowerShell）**
+
+```powershell
+# 路径按你的 Android Studio 安装位置调整
+$env:JAVA_HOME = 'D:\Program\Android\Android Studio\jbr'
+$env:Path = "$env:JAVA_HOME\bin;$env:Path"
+
+java -version        # 应输出 25.x
+```
+
+永久生效（设置一次，以后所有终端都能用）：
+
+```powershell
+[Environment]::SetEnvironmentVariable('JAVA_HOME','D:\Program\Android\Android Studio\jbr','User')
+[Environment]::SetEnvironmentVariable('Path',
+  [Environment]::GetEnvironmentVariable('Path','User') + ';D:\Program\Android\Android Studio\jbr\bin','User')
+```
+
+**macOS**
+
+```bash
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+```
+
+**Linux**
+
+```bash
+export JAVA_HOME="$HOME/android-studio/jbr"   # 按实际安装路径调整
+```
+
 命令行构建：
 
 ```bash
@@ -167,6 +199,14 @@ adb exec-out screencap -p > screen.png
 **Q：编译报 `requires compiling against version 37`？**
 某个依赖要求更高的 `compileSdk`，把 `app/build.gradle.kts` 里的 `compileSdk` 调高，或降低对应库的版本。
 
+**Q：命令行编译报 `Unable to download toolchain matching the requirements`？**
+Gradle 要 JDK 25，但当前终端没有配置 `JAVA_HOME`，于是去 adoptium 自动下载（`github.com` 国内常连不上）。
+不用真的去下载，按上面「环境要求：JDK 25」把 `JAVA_HOME` 指向 Android Studio 自带的 `jbr` 即可：
+
+```powershell
+$env:JAVA_HOME = 'D:\Program\Android\Android Studio\jbr'
+```
+
 ## 踩坑记录
 
 开发过程中遇到的真实问题，按「现象 → 原因 → 解决」记录，供后来者参考。
@@ -181,6 +221,7 @@ adb exec-out screencap -p > screen.png
 | 6 | 桌面上出现两个同名图标 | `PeachActivity` 也声明了 `MAIN` + `LAUNCHER` | 删掉它的 `<intent-filter>`，只保留 `Peach.MainActivity` 一个入口 |
 | 7 | `git push` 报 `error setting certificate file` | Git 安装在 `D:\Program\Git`，但系统 `gitconfig` 里的 `sslCAInfo` 仍指向旧的 `D:/Program Files/Git/...` | 改成 `D:/Program/Git/mingw64/etc/ssl/certs/ca-bundle.crt` |
 | 8 | Studio 的 Share Project 报 `Connection refused: getsockopt` | IDE 的 HTTP Proxy 指向了没有监听的端口（7890） | 设为 `No proxy`（直连可用）或改成实际在跑的 7892 |
+| 9 | 命令行构建报 `Unable to download toolchain ... adoptium ... jdk-25` | `gradle-daemon-jvm.properties` 要求 JDK 25，终端未配置 `JAVA_HOME`，Gradle 转去 GitHub 下载 Temurin 25 被网络拦截 | 把 `JAVA_HOME` 指向 Android Studio 自带的 `jbr`（25），无需下载 |
 
 ### 排查思路
 
