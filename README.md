@@ -28,6 +28,14 @@
   └─ 点击「退出桃园」── setResult(RESULT_OK, 累计数) ──▶ 回到首页并刷新显示
 ```
 
+## 界面截图
+
+| 首页（摘到 3 个） | 继续摘（累计 6 个） | 桃园（点击提示） |
+| :---: | :---: | :---: |
+| ![首页：累计摘到 3 个](docs/screenshots/home-3.png) | ![首页：累计摘到 6 个](docs/screenshots/home.png) | ![桃园：点击桃子弹出 Toast](docs/screenshots/orchard.png) |
+
+> 累计数保存在 `SharedPreferences` 中：退出桃园、杀掉 App 再打开，都会接着上一次的数量继续累加。
+
 ## 技术栈
 
 | 项目 | 版本 |
